@@ -324,9 +324,9 @@ window.addEventListener("load", () => {
       item.className = 'photo-item';
       item.dataset.cat = p.cat;
       const img = document.createElement('img');
-      img.src = p.file
-        ? `img/${p.file}`
-        : `https://picsum.photos/seed/${p.id}/${p.w}/${p.h}`;
+     img.src = p.file
+  ? p.file
+  : `https://picsum.photos/seed/${p.id}/${p.w}/${p.h}`;
       img.alt = p.title;
       img.loading = 'lazy';
       img.addEventListener('load', () => updateMaxScroll());
