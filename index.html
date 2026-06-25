@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -130,7 +130,7 @@
       <!-- 左カラム -->
       <div class="about-left">
         <div class="about-photo-wrap">
-          <img src="img/aya.jpeg" alt="Profile" class="about-photo">
+          <img src="aya.jpeg" alt="Profile" class="about-photo">
         </div>
         <div class="about-intro">
           <p>はじめまして、〇〇 〇〇です。</p>
@@ -189,19 +189,19 @@
           <div class="about-likes">
             <div class="about-like-item">
               <div class="about-like-img-wrap">
-                <img src="img/ryokou.jpeg" alt="旅行">
+                <img src="ryokou.jpeg" alt="旅行">
               </div>
               <p>旅行</p>
             </div>
             <div class="about-like-item">
               <div class="about-like-img-wrap">
-                <img src="img/rin.png" alt="ハスキー">
+                <img src="rin.png" alt="ハスキー">
               </div>
               <p>ハスキー</p>
             </div>
             <div class="about-like-item">
               <div class="about-like-img-wrap">
-                <img src="img/bara.jpeg" alt="植物">
+                <img src="bara.jpeg" alt="植物">
               </div>
               <p>植物</p>
             </div>
@@ -307,8 +307,8 @@ window.addEventListener("load", () => {
     const grid = document.getElementById('grid');
 
     // 画面幅に応じて行数を決定（PC:3行 / タブレット:2行 / スマホ:1行）
-    const ROWS = window.innerWidth <= 480 ? 1 : 2;
-    const ROW_SPEEDS = { 1: [1], 2: [1, 0.9] };
+    const ROWS = 2; // スマホ含め常に2行
+    const ROW_SPEEDS = { 2: [1, 0.9] };
     const speeds = ROW_SPEEDS[ROWS];
 
     grid.style.setProperty('--rows', ROWS);
@@ -635,20 +635,40 @@ window.addEventListener("load", () => {
       clampTarget();
     });
 
-    // タッチで横スクロール
+    // タッチで横スクロール（縦スワイプも横スクロールに変換・自動スクロールも連動）
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchStartTarget = 0;
+    let touchLocked = null; // 'h'=横 / 'v'=縦（最初の動きで確定）
+
     grid.addEventListener('touchstart', (e) => {
-      pauseAuto();
       touchStartX = e.touches[0].pageX;
+      touchStartY = e.touches[0].pageY;
       touchStartTarget = targetScroll;
+      touchLocked = null;
+      gridHover = true; // タッチ開始で自動スクロール有効化
     }, { passive: true });
+
     grid.addEventListener('touchmove', (e) => {
+      const dx = e.touches[0].pageX - touchStartX;
+      const dy = e.touches[0].pageY - touchStartY;
+
+      // 最初に大きく動いた方向を確定
+      if (!touchLocked) {
+        touchLocked = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
+      }
+
+      // 縦横どちらのスワイプも横スクロールに変換
+      const delta = touchLocked === 'h' ? -dx : -dy;
       pauseAuto();
-      targetScroll = touchStartTarget - (e.touches[0].pageX - touchStartX);
+      targetScroll = touchStartTarget + delta;
       clampTarget();
+    }, { passive: true });
+
+    grid.addEventListener('touchend', () => {
+      touchLocked = null;
     }, { passive: true });
   </script>
 
 </body>
-</html>
+</html>   
