@@ -555,7 +555,7 @@ footer p {
   .logo-tagline { display: none; }
   .side-menu { width: 100%; }
 
-  /* フィルターバーをヘッダー直下に固定（!importantで確実に上書き） */
+  /* フィルターバーをヘッダー直下に固定 */
   .filter-bar {
     position: fixed !important;
     top: 64px !important;
@@ -564,12 +564,11 @@ footer p {
     right: 0 !important;
     transform: none !important;
     width: 100% !important;
-    height: 48px !important;
+    height: 40px !important;
     justify-content: flex-start;
     align-items: stretch;
-    background: rgba(246,244,240,0.97);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--white);
+    backdrop-filter: none;
     border: none;
     border-bottom: 1px solid var(--light);
     border-radius: 0;
@@ -581,22 +580,30 @@ footer p {
   .filter-bar::-webkit-scrollbar { display: none; }
 
   .filter-btn {
-    padding: 0 1rem;
+    padding: 0 0.9rem;
     height: 100%;
     flex-shrink: 0;
     border-right: none;
     color: var(--gray);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
   }
-  .filter-btn:last-child { border-right: none; }
-  .filter-btn::after { bottom: 6px; display: block; }
+  .filter-btn::after { bottom: 4px; display: block; }
   .filter-btn:hover { color: var(--black); background: none; }
   .filter-btn.active { color: var(--black); background: none; }
 
-  /* 作品エリアをヘッダー(64px) + フィルター(48px) の下から開始 */
+  /* 作品エリア：ヘッダー64 + フィルター40 = 104px下から、隙間なく */
   main {
-    margin-top: 112px;
-    height: calc(100vh - 112px);
+    margin-top: 104px;
+    height: calc(100vh - 104px);
+    padding: 4px;               /* 上下左右の余白を最小に */
+    gap: 4px;                   /* 行間の隙間を小さく */
+    justify-content: flex-start; /* 上詰めにして下が切れないように */
+  }
+
+  /* 行の高さ：padding・gapを引いた正確な計算 */
+  .track-row {
+    height: calc((100vh - 104px - 8px - 4px) / 2); /* (画面高 - top - padding*2 - gap) / 2行 */
+    gap: 4px;
   }
 }
 
